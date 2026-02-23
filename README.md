@@ -131,3 +131,52 @@ export default function Page() {
 ```
 
 Browse all icons at [lucide.dev/icons](https://lucide.dev/icons).
+
+---
+
+## UI Skills
+
+[UI Skills](https://www.ui-skills.com) is a collection of specialized agent skills that enhance AI-generated interfaces. Once installed, they give your AI agent (Claude Code, Cursor, etc.) deep knowledge of animation, accessibility, design systems, and more.
+
+### Install the full pack
+
+```bash
+npx skills add ibelick/ui-skills
+```
+
+This installs all available skills into `.agents/skills/` and symlinks them for Claude Code and Cursor automatically.
+
+### Install a specific skill
+
+```bash
+npx ui-skills add <skill-name>
+```
+
+**Example:**
+
+```bash
+npx ui-skills add tailwind-css-patterns
+npx ui-skills add fixing-accessibility
+```
+
+### Available skills
+
+| Skill | What it does |
+|---|---|
+| `baseline-ui` | Enforces animation timing, typography consistency, and layout rules |
+| `fixing-accessibility` | Audits and fixes ARIA, keyboard nav, focus states, and color contrast |
+| `fixing-metadata` | Corrects SEO, Open Graph tags, Twitter cards, and structured data |
+| `fixing-motion-performance` | Resolves animation stuttering, layout thrashing, and perf bottlenecks |
+| `12-principles-of-animation` | Applies Disney's animation principles to create natural motion |
+| `canvas-design` | Generates original visual designs focused on form, space, and color |
+| `design-lab` | Interactive design exploration with variant generation and iteration |
+| `frontend-design` | Produces polished frontends that avoid generic AI aesthetics |
+| `interaction-design` | Implements microinteractions, transitions, and user feedback patterns |
+| `interface-design` | Specializes in dashboards, admin panels, and SaaS layouts |
+| `swiftui-ui-patterns` | SwiftUI best practices and component guidance |
+| `tailwind-css-patterns` | Expert guidance for responsive interfaces using Tailwind utilities |
+| `ui-ux-pro-max` | Comprehensive design intelligence with 50+ styles and 97 color palettes |
+| `wcag-audit-patterns` | WCAG 2.2 accessibility audits with remediation guidance |
+| `web-design-guidelines` | Reviews code against Vercel's Web Interface Guidelines |
+
+Browse and preview all skills at [ui-skills.com](https://www.ui-skills.com).
