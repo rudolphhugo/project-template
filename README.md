@@ -4,7 +4,7 @@ A modern, opinionated Next.js starter template with everything pre-configured so
 
 ---
 
-## Core Technologies
+## 🛠️ Core Technologies
 
 | Technology | Version | Purpose |
 |---|---|---|
@@ -16,9 +16,9 @@ A modern, opinionated Next.js starter template with everything pre-configured so
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+### 📋 Prerequisites
 
 Make sure you have the following installed before continuing:
 
@@ -26,7 +26,7 @@ Make sure you have the following installed before continuing:
 - [Git](https://git-scm.com)
 - npm (comes with Node.js)
 
-### Step-by-step installation
+### 📦 Step-by-step installation
 
 **1. Clone the repository**
 
@@ -55,9 +55,9 @@ Navigate to [http://localhost:3000](http://localhost:3000) in your browser. You 
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
-### Adding UI components
+### 🧩 Adding UI components
 
 This template uses [Shadcn/ui](https://ui.shadcn.com). Components are added on-demand — only what you use ends up in your codebase.
 
@@ -90,7 +90,7 @@ Browse all available components at [ui.shadcn.com/docs/components](https://ui.sh
 
 ---
 
-### Using Tailwind CSS
+### 🎨 Using Tailwind CSS
 
 Tailwind is configured and ready to use. Add utility classes directly to your JSX:
 
@@ -118,7 +118,7 @@ Customize these variables in `app/globals.css`.
 
 ---
 
-### Using Lucide Icons
+### ✦ Using Lucide Icons
 
 Import any icon directly from `lucide-react`:
 
@@ -134,11 +134,11 @@ Browse all icons at [lucide.dev/icons](https://lucide.dev/icons).
 
 ---
 
-## UI Skills
+## 🤖 UI Skills
 
 [UI Skills](https://www.ui-skills.com) is a collection of specialized agent skills that enhance AI-generated interfaces. Once installed, they give your AI agent (Claude Code, Cursor, etc.) deep knowledge of animation, accessibility, design systems, and more.
 
-### Install the full pack
+### 📥 Install the full pack
 
 ```bash
 npx skills add ibelick/ui-skills
@@ -146,7 +146,7 @@ npx skills add ibelick/ui-skills
 
 This installs all available skills into `.agents/skills/` and symlinks them for Claude Code and Cursor automatically.
 
-### Install a specific skill
+### 🎯 Install a specific skill
 
 ```bash
 npx ui-skills add <skill-name>
@@ -159,7 +159,7 @@ npx ui-skills add tailwind-css-patterns
 npx ui-skills add fixing-accessibility
 ```
 
-### Available skills
+### 📚 Available skills
 
 | Skill | What it does |
 |---|---|
