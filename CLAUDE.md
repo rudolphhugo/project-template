@@ -48,3 +48,55 @@ These rules apply to all work in this repository. Follow them without exception.
   > "I've learned [X] about this project. Should I add it to CLAUDE.md?"
 - Do not silently discard useful context. Surface it and let the user decide.
 - Keep additions concise — one rule or note per thing learned, no padding.
+
+---
+
+## Project Status
+
+**What this is:** A prototype for an anonymous lost & found key return service. Users attach a physical QR tag to their keys. Finders scan it, land on a web page, and can contact the owner without either party revealing their identity.
+
+**Current state (as of 2026-03-24):** Working prototype, committed to `main`.
+
+### What's built
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Demo landing page with scannable QR code |
+| `/scan/[id]` | Finder's public page (two-step flow) |
+| `/dashboard` | Owner's private dashboard |
+| `/api/tag/[id]` | GET / POST / DELETE — shared server state |
+
+**Key files:**
+- `lib/keyturn-store.ts` — shared TypeScript types (`TagState`, `Message`, `RewardChoice`)
+- `lib/server-store.ts` — in-memory Map (server-side, resets on restart)
+- `app/api/tag/[id]/route.ts` — handles `message`, `location`, `set-reward`, `reward-choice` POST types
+- `components/qr-block.tsx` — client component that generates QR from `window.location.origin`
+
+**Prototype tag ID:** `abc123` — hardcoded in dashboard and QR. The finder URL is `/scan/abc123`.
+
+### Implemented features
+
+- Anonymous chat between finder and owner (cross-device via polling every 2s)
+- Finder two-step flow: greeting screen → actions/chat
+- Quick action buttons (pre-written messages)
+- Optional location sharing (geolocation API with Stockholm fallback)
+- Owner dashboard: item list with live status badges, chat view, map placeholder
+- QR code on landing page encodes the dynamic network IP automatically
+- Reward system: owner sets an amount (kr), finder chooses between gift card code or charity donation (Red Cross, UNICEF, WWF)
+- System messages auto-posted to chat when finder makes reward choice
+
+### Architecture decisions
+
+- **No external backend** — state lives in a server-side `Map` in `lib/server-store.ts`. Resets on dev server restart. Sufficient for prototyping.
+- **Polling, not websockets** — dashboard and finder both poll `/api/tag/[id]` every 2 seconds. Simple, works cross-device on same WiFi.
+- **Dev server runs on port 3002** (port 3000 was occupied). Network URL: `http://192.168.0.2:3002`.
+
+### What's NOT built yet (known gaps)
+
+- Real-time (WebSockets / Supabase) — polling is fine for prototype
+- Persistent storage — state resets on server restart
+- Multiple tag IDs — dashboard is hardcoded to `abc123`
+- QR code generation per item — currently one global QR on landing page
+- Push/email notifications for owner when keys are found
+- Authentication for the owner dashboard
+- "Lost Mode" toggle per item
