@@ -1,3 +1,10 @@
+export type Item = {
+  id: string
+  name: string
+  icon: string
+  tagId: string
+}
+
 export type Message = {
   id: string
   from: 'finder' | 'owner' | 'system'

@@ -13,33 +13,50 @@ import {
   BellRing,
   Loader2,
   Gift,
+  Plus,
+  QrCode,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
-import type { TagState } from '@/lib/keyturn-store'
+import type { TagState, Item } from '@/lib/keyturn-store'
+import { QRBlock } from '@/components/qr-block'
 
 const TAG_ID = 'abc123'
 
-const ITEMS = [
-  { id: 'abc123', name: 'Home Keys', icon: '🔑', tagId: 'abc123' },
-  { id: 'work-badge', name: 'Work Badge', icon: '🪪', tagId: 'work-badge' },
-  { id: 'backpack', name: 'Backpack', icon: '🎒', tagId: 'backpack' },
-]
+const ICON_OPTIONS = ['🔑', '🪪', '🎒', '💼', '👜', '🚗', '🛴', '📱', '💻', '🎸', '🏠', '✈️']
 
 export default function DashboardPage() {
   const [state, setState] = useState<TagState>({
     found: false, locationShared: null, messages: [], reward: null, rewardChoice: null,
   })
+  const [items, setItems] = useState<Item[]>([])
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
   const [ownerInput, setOwnerInput] = useState('')
   const [sending, setSending] = useState(false)
   const [rewardInput, setRewardInput] = useState('')
   const [savingReward, setSavingReward] = useState(false)
+  const [qrItem, setQrItem] = useState<Item | null>(null)
+  const [addOpen, setAddOpen] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newIcon, setNewIcon] = useState('🔑')
+  const [adding, setAdding] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
+  const fetchItems = async () => {
+    const res = await fetch('/api/items')
+    setItems(await res.json())
+  }
+
   useEffect(() => {
+    fetchItems()
     const poll = async () => {
       const res = await fetch(`/api/tag/${TAG_ID}`)
       const data: TagState = await res.json()
@@ -88,6 +105,21 @@ export default function DashboardPage() {
     await fetch(`/api/tag/${TAG_ID}`, { method: 'DELETE' })
     setState({ found: false, locationShared: null, messages: [], reward: null, rewardChoice: null })
     setSelectedItemId(null)
+  }
+
+  const handleAddItem = async () => {
+    if (!newName.trim() || adding) return
+    setAdding(true)
+    await fetch('/api/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName.trim(), icon: newIcon }),
+    })
+    await fetchItems()
+    setNewName('')
+    setNewIcon('🔑')
+    setAdding(false)
+    setAddOpen(false)
   }
 
   return (
@@ -139,9 +171,18 @@ export default function DashboardPage() {
               </div>
             )}
 
-            <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-3">My Items</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-slate-400 text-xs font-medium uppercase tracking-wider">My Items</p>
+              <button
+                onClick={() => setAddOpen(true)}
+                className="flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 text-xs font-medium transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Add item
+              </button>
+            </div>
             <div className="flex flex-col gap-2 mb-5">
-              {ITEMS.map((item) => {
+              {items.map((item) => {
                 const isFound = item.tagId === TAG_ID && state.found
                 return (
                   <button
@@ -160,6 +201,12 @@ export default function DashboardPage() {
                       <p className="text-slate-500 text-xs mt-0.5">Tag ID: KT-{item.tagId.slice(0, 4).toUpperCase()}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setQrItem(item) }}
+                        className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                      >
+                        <QrCode className="w-3.5 h-3.5 text-slate-400" />
+                      </button>
                       {isFound ? (
                         <>
                           <Badge className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs animate-pulse">Found!</Badge>
@@ -327,6 +374,71 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      <Dialog open={!!qrItem} onOpenChange={(open) => !open && setQrItem(null)}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-xs rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white text-base font-semibold flex items-center gap-2">
+              <span>{qrItem?.icon}</span>
+              <span>{qrItem?.name}</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4 pt-1 pb-2">
+            {qrItem && <QRBlock path={`/scan/${qrItem.tagId}`} />}
+            <p className="text-slate-500 text-xs text-center">
+              Print or show this code — finders scan it to contact you anonymously
+            </p>
+            <p className="text-slate-600 text-xs font-mono">KT-{qrItem?.tagId.slice(0, 4).toUpperCase()}</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white text-base font-semibold">Add new item</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 pt-1">
+            <div>
+              <p className="text-slate-400 text-xs mb-2">Item name</p>
+              <Input
+                placeholder="e.g. Car Keys"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
+                autoFocus
+                className="bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus-visible:ring-indigo-500/50 rounded-xl h-10 text-sm"
+              />
+            </div>
+            <div>
+              <p className="text-slate-400 text-xs mb-2">Icon</p>
+              <div className="flex flex-wrap gap-2">
+                {ICON_OPTIONS.map((emoji) => (
+                  <button
+                    key={emoji}
+                    onClick={() => setNewIcon(emoji)}
+                    className={cn(
+                      'w-10 h-10 rounded-xl text-xl flex items-center justify-center transition-colors cursor-pointer',
+                      newIcon === emoji
+                        ? 'bg-indigo-500/30 ring-2 ring-indigo-500'
+                        : 'bg-white/5 hover:bg-white/10',
+                    )}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <Button
+              onClick={handleAddItem}
+              disabled={!newName.trim() || adding}
+              className="bg-indigo-500 hover:bg-indigo-400 text-white h-10 rounded-xl text-sm cursor-pointer disabled:opacity-40"
+            >
+              {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Add item'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   )
 }
