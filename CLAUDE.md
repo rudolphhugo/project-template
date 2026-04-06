@@ -14,15 +14,15 @@ Its purpose is to be copied as a starting point. The stack is fixed and intentio
 
 | Layer | Technology |
 |---|---|
-| Framework | **SvelteKit** |
+| Framework | **Next.js 15** (App Router) |
 | Styling | **Tailwind CSS v4** |
-| Components | **shadcn-svelte** |
-| Icons | **Lucide Svelte** |
+| Components | **shadcn/ui** |
+| Icons | **Lucide React** |
 | Language | **TypeScript** |
 
 ### Stack replacement rule
 
-If the user asks you to replace any part of the core stack — for example, switching SvelteKit to Next.js, or Tailwind to CSS Modules — you **must stop and say this clearly before doing anything**:
+If the user asks you to replace any part of the core stack — you **must stop and say this clearly before doing anything**:
 
 > "You're about to change a foundational part of this template. Specifically: [what they're replacing] → [what they're replacing it with]. This would change the template for all future projects copied from it. Are you sure this is what you intend, or are you working in the wrong repo?"
 
@@ -43,14 +43,15 @@ If the user asks you to replace any part of the core stack — for example, swit
 
 ## 2. Always Use the Existing Stack
 
-**This project uses SvelteKit, shadcn-svelte, Lucide Svelte, and Tailwind v4. Use them.**
+**This project uses Next.js 15, shadcn/ui, Lucide React, and Tailwind v4. Use them.**
 
-- When building UI, always reach for shadcn-svelte components first — even when the user hasn't specified which components to use.
-- If the required shadcn-svelte components are not yet installed, ask before adding:
-  > "These components are needed: `[list]`. Should I install them with `npx shadcn-svelte@latest add`?"
+- When building UI, always reach for shadcn/ui components first — even when the user hasn't specified which components to use.
+- If the required shadcn/ui components are not yet installed, ask before adding:
+  > "These components are needed: `[list]`. Should I install them with `npx shadcn@latest add`?"
 - Offer a "code from scratch" fallback only as an option — **never build components from scratch without explicit confirmation**.
-- Use Lucide Svelte for all iconography unless the user specifies otherwise.
+- Use Lucide React for all iconography unless the user specifies otherwise.
 - Use Tailwind v4 utility classes for all styling — no inline styles, no CSS modules unless specifically requested.
+- All theme tokens live in `app/globals.css` under `@theme {}` — do not use a `tailwind.config.ts`.
 
 ---
 
