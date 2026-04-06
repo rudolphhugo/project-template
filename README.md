@@ -1,6 +1,6 @@
 # Project Template
 
-A modern, opinionated Next.js starter template with everything pre-configured so you can skip the setup and start building immediately.
+A modern, opinionated SvelteKit starter template with everything pre-configured so you can skip the setup and start building immediately.
 
 ---
 
@@ -8,11 +8,12 @@ A modern, opinionated Next.js starter template with everything pre-configured so
 
 | Technology | Version | Purpose |
 |---|---|---|
-| [Next.js](https://nextjs.org) | 16 | React framework with App Router |
+| [SvelteKit](https://kit.svelte.dev) | 2 | Full-stack Svelte framework |
+| [Svelte](https://svelte.dev) | 5 | Component framework |
 | [TypeScript](https://www.typescriptlang.org) | 5 | Type-safe JavaScript |
 | [Tailwind CSS](https://tailwindcss.com) | 4 | Utility-first styling |
-| [Shadcn/ui](https://ui.shadcn.com) | 3 | Accessible, composable UI components |
-| [Lucide React](https://lucide.dev) | 0.575 | Icon library |
+| [shadcn-svelte](https://shadcn-svelte.com) | latest | Accessible, composable UI components |
+| [Lucide Svelte](https://lucide.dev) | latest | Icon library |
 
 ---
 
@@ -31,7 +32,7 @@ Make sure you have the following installed before continuing:
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/rudolphhugo/project-template.git
+git clone <your-repo-url>
 cd project-template
 ```
 
@@ -49,9 +50,9 @@ npm run dev
 
 **4. Open the app**
 
-Navigate to [http://localhost:3000](http://localhost:3000) in your browser. You should see the default Next.js page — you're ready to build.
+Navigate to [http://localhost:5173](http://localhost:5173) in your browser. You should see the default page — you're ready to build.
 
-> The app hot-reloads automatically. Edit `app/page.tsx` and save to see changes instantly.
+> The app hot-reloads automatically. Edit `src/routes/+page.svelte` and save to see changes instantly.
 
 ---
 
@@ -59,52 +60,48 @@ Navigate to [http://localhost:3000](http://localhost:3000) in your browser. You 
 
 ### 🧩 Adding UI components
 
-This template uses [Shadcn/ui](https://ui.shadcn.com). Components are added on-demand — only what you use ends up in your codebase.
+This template uses [shadcn-svelte](https://shadcn-svelte.com). Components are added on-demand — only what you use ends up in your codebase.
 
 To add a component, run:
 
 ```bash
-npx shadcn add <component-name>
+npx shadcn-svelte@latest add <component-name>
 ```
 
 **Examples:**
 
 ```bash
-npx shadcn add button
-npx shadcn add input
-npx shadcn add card
-npx shadcn add dialog
+npx shadcn-svelte@latest add button
+npx shadcn-svelte@latest add input
+npx shadcn-svelte@latest add card
+npx shadcn-svelte@latest add dialog
 ```
 
-Components are installed to `components/ui/` and can be imported using the `@/` alias:
+Components are installed to `src/lib/components/ui/` and can be imported using the `$lib` alias:
 
-```tsx
-import { Button } from "@/components/ui/button"
+```svelte
+<script lang="ts">
+  import { Button } from "$lib/components/ui/button";
+</script>
 
-export default function Page() {
-  return <Button>Click me</Button>
-}
+<Button>Click me</Button>
 ```
 
-Browse all available components at [ui.shadcn.com/docs/components](https://ui.shadcn.com/docs/components).
+Browse all available components at [shadcn-svelte.com/docs/components](https://shadcn-svelte.com/docs/components).
 
 ---
 
 ### 🎨 Using Tailwind CSS
 
-Tailwind is configured and ready to use. Add utility classes directly to your JSX:
+Tailwind is configured and ready to use. Add utility classes directly to your Svelte components:
 
-```tsx
-export default function Page() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <h1 className="text-4xl font-bold text-foreground">Hello world</h1>
-    </div>
-  )
-}
+```svelte
+<main class="flex min-h-screen items-center justify-center bg-background">
+  <h1 class="text-4xl font-bold text-foreground">Hello world</h1>
+</main>
 ```
 
-**CSS variables** (set up by Shadcn) are available as Tailwind tokens:
+**CSS variables** (set up by shadcn-svelte) are available as Tailwind tokens:
 
 | Token | Usage |
 |---|---|
@@ -114,20 +111,20 @@ export default function Page() {
 | `text-muted-foreground` | Subdued text |
 | `border` | Default border color |
 
-Customize these variables in `app/globals.css`.
+Customize these variables in `src/app.css`.
 
 ---
 
 ### ✦ Using Lucide Icons
 
-Import any icon directly from `lucide-react`:
+Import any icon directly from `lucide-svelte`:
 
-```tsx
-import { ArrowRight, Check, Loader2 } from "lucide-react"
+```svelte
+<script lang="ts">
+  import { ArrowRight, Check, Loader2 } from "lucide-svelte";
+</script>
 
-export default function Page() {
-  return <ArrowRight className="h-4 w-4" />
-}
+<ArrowRight class="h-4 w-4" />
 ```
 
 Browse all icons at [lucide.dev/icons](https://lucide.dev/icons).

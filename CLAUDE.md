@@ -4,6 +4,32 @@ These rules apply to all work in this repository. Follow them without exception.
 
 ---
 
+## ⚠️ TEMPLATE INTEGRITY GUARD — READ THIS FIRST
+
+**This repository is a clean starter template. It is not a project.**
+
+Its purpose is to be copied as a starting point. The stack is fixed and intentional. You are working on the template itself, not a product built from it.
+
+### The stack is:
+
+| Layer | Technology |
+|---|---|
+| Framework | **SvelteKit** |
+| Styling | **Tailwind CSS v4** |
+| Components | **shadcn-svelte** |
+| Icons | **Lucide Svelte** |
+| Language | **TypeScript** |
+
+### Stack replacement rule
+
+If the user asks you to replace any part of the core stack — for example, switching SvelteKit to Next.js, or Tailwind to CSS Modules — you **must stop and say this clearly before doing anything**:
+
+> "You're about to change a foundational part of this template. Specifically: [what they're replacing] → [what they're replacing it with]. This would change the template for all future projects copied from it. Are you sure this is what you intend, or are you working in the wrong repo?"
+
+**You may only proceed if the user explicitly confirms** they understand they are modifying the template itself and still want to continue. One clear confirmation is enough — do not keep blocking them after that.
+
+---
+
 ## 1. Plan Before Coding
 
 **Always present a plan and wait for confirmation before writing any code.**
@@ -17,13 +43,13 @@ These rules apply to all work in this repository. Follow them without exception.
 
 ## 2. Always Use the Existing Stack
 
-**This project ships with Next.js, Shadcn/ui, Lucide Icons, and Tailwind v4. Use them.**
+**This project uses SvelteKit, shadcn-svelte, Lucide Svelte, and Tailwind v4. Use them.**
 
-- When building UI, always reach for Shadcn/ui components first — even when the user hasn't specified which components to use.
-- If the required Shadcn components are not yet installed, ask before downloading:
-  > "These components are needed: `[list]`. Should I install them with `npx shadcn@latest add`?"
+- When building UI, always reach for shadcn-svelte components first — even when the user hasn't specified which components to use.
+- If the required shadcn-svelte components are not yet installed, ask before adding:
+  > "These components are needed: `[list]`. Should I install them with `npx shadcn-svelte@latest add`?"
 - Offer a "code from scratch" fallback only as an option — **never build components from scratch without explicit confirmation**.
-- Use Lucide Icons for all iconography unless the user specifies otherwise.
+- Use Lucide Svelte for all iconography unless the user specifies otherwise.
 - Use Tailwind v4 utility classes for all styling — no inline styles, no CSS modules unless specifically requested.
 
 ---
@@ -48,55 +74,3 @@ These rules apply to all work in this repository. Follow them without exception.
   > "I've learned [X] about this project. Should I add it to CLAUDE.md?"
 - Do not silently discard useful context. Surface it and let the user decide.
 - Keep additions concise — one rule or note per thing learned, no padding.
-
----
-
-## Project Status
-
-**What this is:** A prototype for an anonymous lost & found key return service. Users attach a physical QR tag to their keys. Finders scan it, land on a web page, and can contact the owner without either party revealing their identity.
-
-**Current state (as of 2026-03-24):** Working prototype, committed to `main`.
-
-### What's built
-
-| Route | Purpose |
-|-------|---------|
-| `/` | Demo landing page with scannable QR code |
-| `/scan/[id]` | Finder's public page (two-step flow) |
-| `/dashboard` | Owner's private dashboard |
-| `/api/tag/[id]` | GET / POST / DELETE — shared server state |
-
-**Key files:**
-- `lib/keyturn-store.ts` — shared TypeScript types (`TagState`, `Message`, `RewardChoice`)
-- `lib/server-store.ts` — in-memory Map (server-side, resets on restart)
-- `app/api/tag/[id]/route.ts` — handles `message`, `location`, `set-reward`, `reward-choice` POST types
-- `components/qr-block.tsx` — client component that generates QR from `window.location.origin`
-
-**Prototype tag ID:** `abc123` — hardcoded in dashboard and QR. The finder URL is `/scan/abc123`.
-
-### Implemented features
-
-- Anonymous chat between finder and owner (cross-device via polling every 2s)
-- Finder two-step flow: greeting screen → actions/chat
-- Quick action buttons (pre-written messages)
-- Optional location sharing (geolocation API with Stockholm fallback)
-- Owner dashboard: item list with live status badges, chat view, map placeholder
-- QR code on landing page encodes the dynamic network IP automatically
-- Reward system: owner sets an amount (kr), finder chooses between gift card code or charity donation (Red Cross, UNICEF, WWF)
-- System messages auto-posted to chat when finder makes reward choice
-
-### Architecture decisions
-
-- **No external backend** — state lives in a server-side `Map` in `lib/server-store.ts`. Resets on dev server restart. Sufficient for prototyping.
-- **Polling, not websockets** — dashboard and finder both poll `/api/tag/[id]` every 2 seconds. Simple, works cross-device on same WiFi.
-- **Dev server runs on port 3002** (port 3000 was occupied). Network URL: `http://192.168.0.2:3002`.
-
-### What's NOT built yet (known gaps)
-
-- Real-time (WebSockets / Supabase) — polling is fine for prototype
-- Persistent storage — state resets on server restart
-- Multiple tag IDs — dashboard is hardcoded to `abc123`
-- QR code generation per item — currently one global QR on landing page
-- Push/email notifications for owner when keys are found
-- Authentication for the owner dashboard
-- "Lost Mode" toggle per item
